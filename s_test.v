@@ -24,15 +24,17 @@ module s_test;
 
 reg [7:0] a_in, b_in;
 reg clk;
+reg rst;
 reg in_ready;
 wire [11:0] out;
 wire out_ready;
 
 a_sqrtb a_sqrtb_inst(
+    .clk(clk),
+    .rst(rst),
     .a_in(a_in),
     .b_in(b_in),
     .in_ready(in_ready),
-    .clk(clk),
     .y_out(out),
     .y_ready(out_ready)
 );
@@ -48,9 +50,13 @@ end
 
 
 initial begin
+    in_ready = 0;
+    rst = 1;
+
+    #20
+
+    rst = 0;
     for (i = 0; i < 256; i = i + 25) begin
-        #20
-    
         a_in = i;
         b_in = i + 2;
         in_ready = 1;
@@ -61,7 +67,7 @@ initial begin
         
         #580
         
-         $display("Input: a) 0x%h, b) 0x%h Output: 0x%h", a_in, b_in, out);
+        $display("Input: a) 0x%h, b) 0x%h Output: 0x%h", a_in, b_in, out);
     end
 end
 endmodule

@@ -22,13 +22,14 @@
 
 module ab_tb;
 
-reg clk_reg, in_ready;
+reg clk_reg, rst, in_ready;
 reg [7:0] in;
 wire [3:0] out;
 wire out_ready;
 
 sqrt sqrt_inst(
     .clk(clk_reg),
+    .rst(rst),
     .x_in(in),
     .x_ready(in_ready),
     .y_out(out),
@@ -45,9 +46,15 @@ end
 
 initial begin
     in = 203;
+    rst = 1;
+    in_ready = 0;
+
+    #20
+
+    rst = 0;
     in_ready = 1;
     
-    #10
+    #20
     
     in_ready = 0;
     
